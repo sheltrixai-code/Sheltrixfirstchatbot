@@ -41,7 +41,7 @@ for message in st.session_state.messages:
 # ----------------------------
 if prompt := st.chat_input("Type your message..."):
 
-    # Display user message
+    # Save user message
     st.session_state.messages.append(
         {
             "role": "user",
@@ -49,41 +49,41 @@ if prompt := st.chat_input("Type your message..."):
         }
     )
 
-    with st.chat_message("user"):
-        st.markdown(prompt)
+    # Show user message
+    show_message("user", prompt)
 
-    # Assistant Response
-with st.spinner("Thinking..."):
+    with st.chat_message("assistant"):
 
-    try:
+        with st.spinner("Thinking..."):
 
-        messages = [
-            {
-                "role": "system",
-                "content": "You are a helpful AI assistant."
-            }
-        ]
+            try:
 
-        messages.extend(st.session_state.messages)
+                messages = [
+                    {
+                        "role": "system",
+                        "content": "You are a helpful AI assistant."
+                    }
+                ]
 
-        reply = get_ai_response(
-            messages=messages,
-            temperature=temperature,
-            model=model
-        )
+                messages.extend(st.session_state.messages)
 
-        st.session_state.messages.append(
-            {
-                "role": "assistant",
-                "content": reply
-            }
-        )
-        st.write("DEBUG:", reply)
-        show_message("assistant", reply)
-        show_message("assistant", reply)
+                reply = get_ai_response(
+                    messages=messages,
+                    temperature=temperature,
+                    model=model
+                )
 
-    except Exception as e:
-        st.error(str(e))
+                st.markdown(reply)
+
+                st.session_state.messages.append(
+                    {
+                        "role": "assistant",
+                        "content": reply
+                    }
+                )
+
+            except Exception as e:
+                st.error(str(e))
 # ----------------------------
 # Sidebar
 # ----------------------------
