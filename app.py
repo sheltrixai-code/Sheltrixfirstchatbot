@@ -3,6 +3,7 @@ import requests
 from components.sidebar import show_sidebar
 from components.styles import load_css
 from components.header import show_header
+from components.chat import show_message
 # ----------------------------
 # Page Configuration
 # ----------------------------

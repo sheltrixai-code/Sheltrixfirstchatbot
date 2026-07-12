@@ -1,3 +1,94 @@
+/* =========================
+   Sheltrix AI Theme
+========================= */
+
 .stApp {
-    background-color: #0F172A;
+    background: #0f172a;
+}
+
+/* Main container */
+.block-container {
+    max-width: 900px;
+    margin: auto;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* Sidebar */
+section[data-testid="stSidebar"] {
+    background: #111827;
+}
+
+/* Header */
+.hero-card {
+    background: linear-gradient(135deg,#2563eb,#06b6d4);
+    padding:30px;
+    border-radius:20px;
+    color:white;
+    margin-bottom:25px;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.hero-card h1{
+    margin:0;
+    font-size:42px;
+}
+
+.hero-card p{
+    margin-top:12px;
+    font-size:20px;
+}
+
+/* User message */
+[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]){
+
+    background:#1e293b;
+    border-radius:15px;
+    padding:15px;
+    margin:10px 0;
+}
+
+/* Assistant message */
+[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]){
+
+    background:#172554;
+    border-radius:15px;
+    padding:15px;
+    margin:10px 0;
+}
+
+/* Chat input */
+.stChatInput {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(900px, 70vw) !important;
+    z-index: 999;
+}
+}
+
+/* Buttons */
+.stButton>button{
+    width:100%;
+    border-radius:12px;
+}
+
+/* Slider */
+.stSlider{
+    padding-top:15px;
+}
+header[data-testid="stHeader"]{
+    display:none;
+}
+
+#MainMenu{
+    visibility:hidden;
+}
+
+footer{
+    visibility:hidden;
+}
+[data-testid="stChatMessage"]{
+    color:white;
 }
