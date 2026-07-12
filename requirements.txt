@@ -1,3 +1,4 @@
 streamlit
 requests
 streamlit-shadcn-ui
+streamlit-extras
