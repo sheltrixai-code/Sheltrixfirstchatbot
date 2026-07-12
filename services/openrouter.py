@@ -1,12 +1,9 @@
+import json
 import requests
 import streamlit as st
 
 
 def get_ai_response(messages, temperature, model):
-    """
-    Send chat messages to OpenRouter and return the AI response.
-    """
-
     api_key = st.secrets["OPENROUTER_API_KEY"]
 
     headers = {
@@ -19,20 +16,42 @@ def get_ai_response(messages, temperature, model):
     payload = {
         "model": model,
         "messages": messages,
-        "temperature": temperature
+        "temperature": temperature,
+        "stream": True
     }
 
     response = requests.post(
         "https://openrouter.ai/api/v1/chat/completions",
         headers=headers,
         json=payload,
-        timeout=60
+        timeout=60,
+        stream=True
     )
 
     response.raise_for_status()
-    print("STATUS:", response.status_code)
-    print("RESPONSE:", response.text)
 
-    data = response.json()
+    for line in response.iter_lines():
 
-    return data["choices"][0]["message"]["content"]
+        if not line:
+            continue
+
+        line = line.decode("utf-8")
+
+        if not line.startswith("data: "):
+            continue
+
+        data = line[6:]
+
+        if data == "[DONE]":
+            break
+
+        try:
+            chunk = json.loads(data)
+
+            delta = chunk["choices"][0]["delta"]
+
+            if "content" in delta:
+                yield delta["content"]
+
+        except Exception:
+            continue

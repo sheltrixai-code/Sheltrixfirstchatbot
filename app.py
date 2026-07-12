@@ -1,5 +1,4 @@
 import streamlit as st
-import requests
 from components.sidebar import show_sidebar
 from components.styles import load_css
 from components.header import show_header
@@ -51,7 +50,6 @@ if prompt := st.chat_input("Type your message..."):
 
     # Show user message
     show_message("user", prompt)
-
     with st.chat_message("assistant"):
 
         with st.spinner("Thinking..."):
@@ -67,18 +65,23 @@ if prompt := st.chat_input("Type your message..."):
 
                 messages.extend(st.session_state.messages)
 
-                reply = get_ai_response(
+                placeholder = st.empty()
+                full_reply = ""
+
+                for chunk in get_ai_response(
                     messages=messages,
                     temperature=temperature,
                     model=model
-                )
+                ):
+                    full_reply += chunk
+                    placeholder.markdown(full_reply + "▌")
 
-                st.markdown(reply)
+                placeholder.markdown(full_reply)
 
                 st.session_state.messages.append(
                     {
                         "role": "assistant",
-                        "content": reply
+                        "content": full_reply
                     }
                 )
 
