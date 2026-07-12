@@ -4,6 +4,7 @@ from components.sidebar import show_sidebar
 from components.styles import load_css
 from components.header import show_header
 from components.chat import show_message
+from services.openrouter import get_ai_response
 # ----------------------------
 # Page Configuration
 # ----------------------------
@@ -30,8 +31,10 @@ if "messages" not in st.session_state:
 
 # Display Previous Messages
 for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+    show_message(
+        message["role"],
+        message["content"]
+    )
 
 # ----------------------------
 # Get User Input
@@ -50,76 +53,37 @@ if prompt := st.chat_input("Type your message..."):
         st.markdown(prompt)
 
     # Assistant Response
-    with st.chat_message("assistant"):
+with st.spinner("Thinking..."):
 
-        with st.spinner("Thinking..."):
+    try:
 
-            try:
+        messages = [
+            {
+                "role": "system",
+                "content": "You are a helpful AI assistant."
+            }
+        ]
 
-                api_key = st.secrets["OPENROUTER_API_KEY"]
+        messages.extend(st.session_state.messages)
 
-                # Conversation sent to model
-                messages = [
-                    {
-                        "role": "system",
-                        "content": "You are a helpful AI assistant."
-                    }
-                ]
+        reply = get_ai_response(
+            messages=messages,
+            temperature=temperature,
+            model=model
+        )
 
-                messages.extend(st.session_state.messages)
+        st.session_state.messages.append(
+            {
+                "role": "assistant",
+                "content": reply
+            }
+        )
+        st.write("DEBUG:", reply)
+        show_message("assistant", reply)
+        show_message("assistant", reply)
 
-                headers = {
-                    "Authorization": f"Bearer {api_key}",
-                    "Content-Type": "application/json",
-                    "HTTP-Referer": "https://streamlit.io",
-                    "X-Title": "Streamlit Chatbot"
-                }
-
-                payload = {
-                    "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
-                    "messages": messages,
-                    "temperature": temperature
-                }
-
-                response = requests.post(
-                    "https://openrouter.ai/api/v1/chat/completions",
-                    headers=headers,
-                    json=payload,
-                    timeout=60
-                )
-
-                # Raise exception if API failed
-                response.raise_for_status()
-
-                data = response.json()
-
-                reply = data["choices"][0]["message"]["content"]
-
-                st.markdown(reply)
-
-                st.session_state.messages.append(
-                    {
-                        "role": "assistant",
-                        "content": reply
-                    }
-                )
-
-            except KeyError:
-                st.error("OPENROUTER_API_KEY not found in Streamlit Secrets.")
-
-            except requests.exceptions.HTTPError:
-                try:
-                    error_message = response.json()
-                except Exception:
-                    error_message = response.text
-                st.error(f"API Error:\n{error_message}")
-
-            except requests.exceptions.RequestException as e:
-                st.error(f"Network Error: {e}")
-
-            except Exception as e:
-                st.error(f"Unexpected Error: {e}")
-
+    except Exception as e:
+        st.error(str(e))
 # ----------------------------
 # Sidebar
 # ----------------------------
