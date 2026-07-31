@@ -29,6 +29,7 @@ def show_sidebar():
             ]
 
             st.session_state.current_chat = new_chat_name
+
             st.session_state.messages = (
                 st.session_state.chats[new_chat_name]
             )
@@ -63,7 +64,10 @@ def show_sidebar():
         # Rename Current Chat
         # ----------------------------
 
-        if st.session_state.current_chat in st.session_state.chats:
+        if (
+            st.session_state.current_chat
+            in st.session_state.chats
+        ):
 
             with st.expander("✏️ Rename Chat"):
 
@@ -93,6 +97,10 @@ def show_sidebar():
 
                             st.session_state.current_chat = new_name
 
+                            st.session_state.messages = (
+                                st.session_state.chats[new_name]
+                            )
+
                         st.rerun()
 
         st.markdown("---")
@@ -102,6 +110,10 @@ def show_sidebar():
         # ----------------------------
 
         st.success("🟢 Status: Online")
+
+        # ----------------------------
+        # AI Model
+        # ----------------------------
 
         st.markdown("### AI Model")
 
