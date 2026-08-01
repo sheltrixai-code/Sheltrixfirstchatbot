@@ -1,0 +1,38 @@
+{
+    "Hi..How are you": [
+        {
+            "role": "assistant",
+            "content": "Hello! How can I help you today?"
+        },
+        {
+            "role": "user",
+            "content": "Hi..How are you"
+        },
+        {
+            "role": "assistant",
+            "content": "Hi! I'm doing well, thank you for asking. How can I help you today?"
+        },
+        {
+            "role": "user",
+            "content": "Hello, this is a persistence test."
+        },
+        {
+            "role": "assistant",
+            "content": "Understood. I'm ready when you are—what would you like to test?"
+        }
+    ],
+    "Whats your plan today": [
+        {
+            "role": "assistant",
+            "content": "Hello! How can I help you today?"
+        },
+        {
+            "role": "user",
+            "content": "Whats your plan today"
+        },
+        {
+            "role": "assistant",
+            "content": "As an AI, I don’t have personal plans, a schedule, or a life outside of our conversation. My \"plan\" is simply to be here and ready to help you with whatever you need!\n\n**How can I assist you today?** For example, I can help with:\n*   Answering questions or explaining concepts\n*   Writing, editing, or brainstorming ideas\n*   Coding, debugging, or technical explanations\n*   Planning, organizing, or summarizing information\n*   Just chatting if you're bored"
+        }
+    ]
+}
